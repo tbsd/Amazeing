@@ -14,8 +14,8 @@ public class Maze : MonoBehaviour
   public GameObject Planet;
   public GameObject Player;
   public GameObject Finish;
-  public Material wallMaterial;
-  
+  public GameObject wallObject;
+
   void Start() {
     Screen.orientation = ScreenOrientation.LandscapeRight;
     switch(shape) { 
@@ -79,6 +79,8 @@ public class Maze : MonoBehaviour
     builder.transform.RotateAround(Planet.transform.localPosition, Planet.transform.right, 90f);
     builder.transform.Rotate(new Vector3(0, -90, 0));
     drawHemisphere(mazeBuilder, bottomRadius, bottomRadius, mazeBuilder.ActualHeight + bottomRadius - 1, builder, (vAngleSpace * bottomRadius) / (topRadius + bottomRadius), -1);
+    GameObject.Destroy(builder);
+    GameObject.Destroy(wallObject);
   }
 
   private void drawHemisphere(MazeBuilder mazeBuilder, int actualRadius, int xCenter, int yCenter, GameObject builder, float vAngle, int hDirection) {
@@ -136,7 +138,7 @@ public class Maze : MonoBehaviour
         }
 
         if (mazePart.State == NodeState.Wall) {
-          GameObject wallPart = GameObject.CreatePrimitive(PrimitiveType.Cube);
+          GameObject wallPart = GameObject.Instantiate(wallObject);
           wallPart.transform.SetParent(Planet.transform);
           wallPart.transform.localScale = wallScale;
           wallPart.transform.position = builder.transform.position;
@@ -145,7 +147,6 @@ public class Maze : MonoBehaviour
             wallPart.transform.RotateAround(Planet.transform.localPosition, Planet.transform.up, -hRotationStep * 0.3f);
           }
           wallPart.transform.rotation = builder.transform.rotation;
-          wallPart.GetComponent<Renderer>().material = wallMaterial;
           wallPart.layer = LayerMask.NameToLayer ("Ignore Raycast");
         } else if (mazePart.State == NodeState.Finish) {
           Finish.transform.SetParent(Planet.transform);
@@ -238,12 +239,11 @@ public class Maze : MonoBehaviour
         builder.transform.localPosition += vStep * (i - vStart);
         for (int j = hStart; j < hStart + actualEdge; ++j) {
           if (graph[i, j].State == NodeState.Wall) {
-            GameObject wallPart = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            GameObject wallPart = GameObject.Instantiate(wallObject);
             wallPart.transform.SetParent(Planet.transform);
             wallPart.transform.localScale = wallScale;
             wallPart.transform.position = builder.transform.position;
             wallPart.transform.rotation = builder.transform.rotation;
-            wallPart.GetComponent<Renderer>().material = wallMaterial;
             wallPart.layer = LayerMask.NameToLayer ("Ignore Raycast");
           } else if (graph[i, j].State == NodeState.Finish) {
             Finish.transform.SetParent(Planet.transform);
@@ -257,6 +257,7 @@ public class Maze : MonoBehaviour
       }
     }
     GameObject.Destroy(builder);
+    GameObject.Destroy(wallObject);
   }
   
   void cylinderMaze(int mazeWidth, int mazeHeight) {
@@ -286,7 +287,7 @@ public class Maze : MonoBehaviour
     for (int i = 0; i < height; ++i) {
       for (int j = 0; j < width; ++j) {
         if(graph[i, j].State == NodeState.Wall) {
-          GameObject wallPart = GameObject.CreatePrimitive(PrimitiveType.Cube);
+          GameObject wallPart = GameObject.Instantiate(wallObject);
           wallPart.GetComponent<BoxCollider>().size += new Vector3(0, 3, 0);
           wallPart.transform.localScale = wallScale;
           if (i == 0 || i == height - 1) 
@@ -294,7 +295,6 @@ public class Maze : MonoBehaviour
           wallPart.transform.SetParent(Planet.transform);
           wallPart.transform.position = builder.transform.position;
           wallPart.transform.rotation = builder.transform.rotation;
-          wallPart.GetComponent<Renderer>().material = wallMaterial;
         } else if (graph[i, j].State == NodeState.Finish) {
           Finish.transform.localScale = wallScale - new Vector3(0, 0.1f, 0);
           Finish.transform.position = builder.transform.position;
@@ -306,5 +306,6 @@ public class Maze : MonoBehaviour
       pos = builder.transform.localPosition.y;
     }
     GameObject.Destroy(builder);
+    GameObject.Destroy(wallObject);
   }
 }
