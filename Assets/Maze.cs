@@ -67,8 +67,8 @@ public class Maze : MonoBehaviour
     mazeBuilder.InitMaze(Shape.Sphere);
     mazeBuilder.HuntAndKill();
     Debug.Log(mazeBuilder.toString());
-    int topRadius = mazeBuilder.TrueHeight / 2 + 1;
-    int bottomRadius = mazeBuilder.TrueHeight / 2;
+    int topRadius = mazeBuilder.ActualHeight / 2 + 1;
+    int bottomRadius = mazeBuilder.ActualHeight / 2;
     GameObject builder = Instantiate(GameObject.CreatePrimitive(PrimitiveType.Sphere), Planet.transform);
     builder.transform.rotation = Quaternion.identity;
     builder.transform.localPosition = new Vector3(0, 0.5f, 0);
@@ -78,18 +78,18 @@ public class Maze : MonoBehaviour
     drawHemisphere(mazeBuilder, topRadius, topRadius - 1, topRadius - 1, builder, (vAngleSpace * topRadius) / (topRadius + bottomRadius), 1);
     builder.transform.RotateAround(Planet.transform.localPosition, Planet.transform.right, 90f);
     builder.transform.Rotate(new Vector3(0, -90, 0));
-    drawHemisphere(mazeBuilder, bottomRadius, bottomRadius, mazeBuilder.TrueHeight + bottomRadius - 1, builder, (vAngleSpace * bottomRadius) / (topRadius + bottomRadius), -1);
+    drawHemisphere(mazeBuilder, bottomRadius, bottomRadius, mazeBuilder.ActualHeight + bottomRadius - 1, builder, (vAngleSpace * bottomRadius) / (topRadius + bottomRadius), -1);
   }
 
-  private void drawHemisphere(MazeBuilder mazeBuilder, int trueRadius, int xCenter, int yCenter, GameObject builder, float vAngle, int hDirection) {
+  private void drawHemisphere(MazeBuilder mazeBuilder, int actualRadius, int xCenter, int yCenter, GameObject builder, float vAngle, int hDirection) {
     MazeElement[,] graph = mazeBuilder.Maze;
     int diametr = mazeBuilder.Height;
-    float vRotationStep = vAngle / trueRadius;
+    float vRotationStep = vAngle / actualRadius;
     Debug.Log(mazeBuilder.toString());
     int xMax, yMax, xMin, yMin;
     xMax = xMin = xCenter;
     yMax = yMin = yCenter;
-    for (int i = 0; i < trueRadius; ++i) { 
+    for (int i = 0; i < actualRadius; ++i) { 
       int xInc = 1;
       int yInc = 0;
       int xPos = xMin;
@@ -105,7 +105,7 @@ public class Maze : MonoBehaviour
       float wallWidth = (rowLength / rowCount) * 0.9f;
       if (i == 0)
         wallWidth = 0.05f;
-      Vector3 wallScale = new Vector3(wallWidth, .1f, 1f / trueRadius);
+      Vector3 wallScale = new Vector3(wallWidth, .1f, 1f / actualRadius);
       do {
         MazeElement mazePart = graph[xPos, yPos];
         if (xPos == xMax && xInc == 1) {
@@ -171,11 +171,11 @@ public class Maze : MonoBehaviour
     mazeBuilder.InitMaze(Shape.Box);
     mazeBuilder.HuntAndKill();
     MazeElement[,] graph = mazeBuilder.Maze;
-    int trueEdge = edgeSize * 2;
+    int actualEdge = edgeSize * 2;
     GameObject builder = Instantiate(GameObject.CreatePrimitive(PrimitiveType.Sphere), Planet.transform);
     builder.transform.rotation = Quaternion.identity;
-    Vector3 wallScale = new Vector3(1f / trueEdge, 1f / trueEdge, 1f / trueEdge);
-    float posStep = 1.0f / trueEdge;
+    Vector3 wallScale = new Vector3(1f / actualEdge, 1f / actualEdge, 1f / actualEdge);
+    float posStep = 1.0f / actualEdge;
     for (int g = 0; g < 6; ++g) {
       Vector3 minPos;
       Vector3 vStep;
@@ -188,38 +188,38 @@ public class Maze : MonoBehaviour
           vStep = new Vector3(posStep, 0, 0);
           hStep = new Vector3(0, 0, posStep);
           vStart = 0;
-          hStart = trueEdge;
+          hStart = actualEdge;
           break;
         case 1:
           minPos = new Vector3(0.5f + posStep / 2f, 0.5f - posStep / 2f, -0.5f + posStep / 2f);
           builder.transform.Rotate(0, 0, -90);
           vStep = new Vector3(0, -posStep, 0);
           hStep = new Vector3(0, 0, posStep);
-          vStart = trueEdge;
-          hStart = trueEdge;
+          vStart = actualEdge;
+          hStart = actualEdge;
           break;
         case 2:
           minPos = new Vector3(0.5f - posStep / 2f, 0.5f - posStep / 2f, 0.5f + posStep / 2f);
           builder.transform.Rotate(0, -90, 0);
           vStep = new Vector3(0, -posStep, 0);
           hStep = new Vector3(-posStep, 0, 0);
-          vStart = trueEdge;
-          hStart = trueEdge * 2;
+          vStart = actualEdge;
+          hStart = actualEdge * 2;
           break;
         case 3:
           minPos = new Vector3(-0.5f - posStep / 2f, 0.5f - posStep / 2f, 0.5f - posStep / 2f);
           builder.transform.Rotate(0, 0, -90);
           vStep = new Vector3(0, -posStep, 0);
           hStep = new Vector3(0, 0, -posStep);
-          vStart = trueEdge;
-          hStart = trueEdge * 3;
+          vStart = actualEdge;
+          hStart = actualEdge * 3;
           break;
         case 4:
           minPos = new Vector3(-0.5f + posStep / 2f, 0.5f - posStep / 2f, -0.5f - posStep / 2f);
           builder.transform.Rotate(0, 0, -90);
           vStep = new Vector3(0, -posStep, 0);
           hStep = new Vector3(posStep, 0, 0);
-          vStart = trueEdge;
+          vStart = actualEdge;
           hStart = 0;
           break;
         case 5:
@@ -227,16 +227,16 @@ public class Maze : MonoBehaviour
           builder.transform.Rotate(-90, 0, -90);
           vStep = new Vector3(-posStep, 0, 0);
           hStep = new Vector3(0, 0, posStep);
-          vStart = trueEdge * 2;
-          hStart = trueEdge;
+          vStart = actualEdge * 2;
+          hStart = actualEdge;
           break;
         default:
           return;
       }
-      for (int i = vStart; i < vStart + trueEdge; ++i) {
+      for (int i = vStart; i < vStart + actualEdge; ++i) {
         builder.transform.localPosition = minPos;
         builder.transform.localPosition += vStep * (i - vStart);
-        for (int j = hStart; j < hStart + trueEdge; ++j) {
+        for (int j = hStart; j < hStart + actualEdge; ++j) {
           if (graph[i, j].State == NodeState.Wall) {
             GameObject wallPart = GameObject.CreatePrimitive(PrimitiveType.Cube);
             wallPart.transform.SetParent(Planet.transform);
@@ -264,8 +264,8 @@ public class Maze : MonoBehaviour
     mazeBuilder.InitMaze(Shape.Cyllinder);
     mazeBuilder.HuntAndKill();
     MazeElement[,] graph = mazeBuilder.Maze;
-    int height = mazeBuilder.TrueHeight;
-    int width = mazeBuilder.TrueWidth;
+    int height = mazeBuilder.ActualHeight;
+    int width = mazeBuilder.ActualWidth;
     Vector3 minX = new Vector3(-0.5f, 0, 0);
     Vector3 maxX = new Vector3(-0.5f, 0, 0);
     Vector3 minY = new Vector3(0, -1, 0);

@@ -15,17 +15,17 @@ namespace MazeBuilderNS {
     public int Height {get;set;}
     public int StepsLimit;
     public int Width {get;set;}
-    private int trueHeight;
-    private int trueWidth;
+    private int actualHeight;
+    private int actualWidth;
 
-    public int TrueHeight {
+    public int ActualHeight {
       get {
-        return trueHeight;
+        return actualHeight;
       }
     }
-    public int TrueWidth {
+    public int ActualWidth {
       get {
-        return trueWidth;
+        return actualWidth;
       } }
 
     public MazeElement[,] Maze {
@@ -64,10 +64,10 @@ namespace MazeBuilderNS {
     private void initSphere() {
       Height = Height * 2 + 1;
       Width = Height;
-      trueHeight = Height;
-      trueWidth = Width * 2 - 2;
-      maze = new MazeElement[TrueHeight, TrueWidth];
-      for (int i = 0; i < TrueHeight; ++i) {
+      actualHeight = Height;
+      actualWidth = Width * 2 - 2;
+      maze = new MazeElement[ActualHeight, ActualWidth];
+      for (int i = 0; i < ActualHeight; ++i) {
         for (int j = 0; j < Width; ++j) {
           if (i % 2 == 0 || j % 2 == 0)
             maze[i, j] = new Wall();
@@ -75,8 +75,8 @@ namespace MazeBuilderNS {
             maze[i, j] = new Node();
         }
       }
-      for (int i = 1; i < TrueHeight - 1; ++i) {
-        for (int j = Width; j < TrueWidth; ++j) {
+      for (int i = 1; i < ActualHeight - 1; ++i) {
+        for (int j = Width; j < ActualWidth; ++j) {
           if (i % 2 == 0 || j % 2 == 0)
             maze[i, j] = new Wall();
           else
@@ -84,8 +84,8 @@ namespace MazeBuilderNS {
         }
       }
       Debug.Log(toString());
-      for (int i = 0; i < TrueHeight; ++i) {
-        for (int j = 0; j < TrueWidth; ++j) {
+      for (int i = 0; i < ActualHeight; ++i) {
+        for (int j = 0; j < ActualWidth; ++j) {
           if (maze[i, j] != null && maze[i, j] is Node) {
             Node cell = (Node) maze[i, j];
             Wall wall;
@@ -96,7 +96,7 @@ namespace MazeBuilderNS {
             }
             wall.AddConnected(cell);
             cell.AddWall(wall);
-            if (i < TrueHeight - 2 || j < Width) 
+            if (i < ActualHeight - 2 || j < Width) 
               wall = (Wall)maze[i + 1, j];
             else 
               wall = (Wall)maze[i + 1, Width * 2 - 2 - j];
@@ -105,10 +105,10 @@ namespace MazeBuilderNS {
             if (j > 0) 
               wall = (Wall)maze[i, j - 1];
             else 
-              wall = (Wall)maze[i, TrueWidth - 1];
+              wall = (Wall)maze[i, ActualWidth - 1];
             wall.AddConnected(cell);
             cell.AddWall(wall);
-            if (j < TrueWidth - 2) 
+            if (j < ActualWidth - 2) 
               wall = (Wall)maze[i, j + 1];
             else 
               wall = (Wall)maze[i, 0];
@@ -121,9 +121,9 @@ namespace MazeBuilderNS {
     
     private void initBox() {
       int edge = Width * 2;
-      trueHeight = 3 * edge;
-      trueWidth = 4 * edge;
-      maze = new MazeElement[TrueHeight, TrueWidth];
+      actualHeight = 3 * edge;
+      actualWidth = 4 * edge;
+      maze = new MazeElement[ActualHeight, ActualWidth];
       for (int i = 0; i < edge; ++i)
         for (int j = edge; j < edge * 2; ++j)
           if (i % 2 == 1 || j % 2 == 1)
@@ -143,8 +143,8 @@ namespace MazeBuilderNS {
           else
             maze[i, j] = new Node();
       Debug.Log(toString());
-      for (int i = 0; i < TrueHeight; ++i)
-        for (int j = 0; j < TrueWidth; ++j)
+      for (int i = 0; i < ActualHeight; ++i)
+        for (int j = 0; j < ActualWidth; ++j)
           if (maze[i, j] != null  && maze[i, j] is Node) {
             Node cell = (Node)maze[i, j];
             if (i != 0 && maze[i - 1, j] != null) {
@@ -152,7 +152,7 @@ namespace MazeBuilderNS {
               cell.AddWall(wall);
               wall.AddConnected(cell);
             }
-            if (i != TrueHeight - 1 && maze[i + 1, j] != null) {
+            if (i != ActualHeight - 1 && maze[i + 1, j] != null) {
               Wall wall = (Wall)maze[i + 1, j];
               cell.AddWall(wall);
               wall.AddConnected(cell);
@@ -162,7 +162,7 @@ namespace MazeBuilderNS {
               cell.AddWall(wall);
               wall.AddConnected(cell);
             }
-            if (j != TrueWidth - 1 && maze[i, j + 1] != null) {
+            if (j != ActualWidth - 1 && maze[i, j + 1] != null) {
               Wall wall = (Wall)maze[i, j + 1];
               cell.AddWall(wall);
               wall.AddConnected(cell);
@@ -298,12 +298,12 @@ namespace MazeBuilderNS {
     }
 
     private void initCyllinder() {
-      trueWidth = 2 * Width;
-      trueHeight = 2 * Height + 1;
-      maze = new MazeElement[TrueHeight, TrueWidth];
-      for (int i = 0; i < TrueHeight; ++i) {
-        for (int j = 0; j < TrueWidth; ++j) {
-          if (i % 2 == 0 || j % 2 == 0 || i == 0 || i == TrueHeight - 1) {
+      actualWidth = 2 * Width;
+      actualHeight = 2 * Height + 1;
+      maze = new MazeElement[ActualHeight, ActualWidth];
+      for (int i = 0; i < ActualHeight; ++i) {
+        for (int j = 0; j < ActualWidth; ++j) {
+          if (i % 2 == 0 || j % 2 == 0 || i == 0 || i == ActualHeight - 1) {
             maze[i, j] = new Wall();
           }
           else { 
@@ -311,8 +311,8 @@ namespace MazeBuilderNS {
           }
         }
       }
-      for (int i = 1; i < TrueHeight - 1; ++i) {
-        for (int j = 0; j < TrueWidth; ++j) {
+      for (int i = 1; i < ActualHeight - 1; ++i) {
+        for (int j = 0; j < ActualWidth; ++j) {
           if (maze[i, j] is Node) {
             Node cell = (Node)maze[i, j];
             if (i - 1 >= 0 && maze[i - 1, j] is Wall) {
@@ -320,7 +320,7 @@ namespace MazeBuilderNS {
               cell.AddWall(wall);
               wall.AddConnected(cell);
             }
-            if (i + 1 < TrueHeight && maze[i + 1, j] is Wall) {
+            if (i + 1 < ActualHeight && maze[i + 1, j] is Wall) {
               Wall wall = (Wall)maze[i + 1, j];
               cell.AddWall(wall);
               wall.AddConnected(cell);
@@ -329,12 +329,12 @@ namespace MazeBuilderNS {
               Wall wall = (Wall)maze[i, j - 1];
               cell.AddWall(wall);
               wall.AddConnected(cell);
-            } else if (maze[i, TrueWidth - 1] is Wall) {
-              Wall wall = (Wall)maze[i, TrueWidth - 1];
+            } else if (maze[i, ActualWidth - 1] is Wall) {
+              Wall wall = (Wall)maze[i, ActualWidth - 1];
               cell.AddWall(wall);
               wall.AddConnected(cell);
             }
-            if (j + 1 < TrueWidth && maze[i, j + 1] is Wall) {
+            if (j + 1 < ActualWidth && maze[i, j + 1] is Wall) {
               Wall wall = (Wall)maze[i, j + 1];
               cell.AddWall(wall);
               wall.AddConnected(cell);
@@ -354,8 +354,8 @@ namespace MazeBuilderNS {
       int x = 0;
       int y = 0;
       Node current = null;
-      for (int i = 1; i < TrueHeight - 1; ++i) {
-        for (int j = 0; j < TrueWidth - 1; ++j) {
+      for (int i = 1; i < ActualHeight - 1; ++i) {
+        for (int j = 0; j < ActualWidth - 1; ++j) {
           MazeElement start = maze[i, j];
           if (start != null && start is Node) {
             current = (Node)start;
@@ -386,12 +386,12 @@ namespace MazeBuilderNS {
           }
 
           // loop through maze starting from random place
-          int k = rng.Next(0, TrueHeight);
-          int t = rng.Next(0, TrueWidth);
-          for (; k < TrueHeight * 2 - 1; ++k) {
-            for (; t < TrueWidth * 2 - 1; ++t) {
-              int i = k % (TrueHeight - 1);
-              int j = t % (TrueWidth - 1);
+          int k = rng.Next(0, ActualHeight);
+          int t = rng.Next(0, ActualWidth);
+          for (; k < ActualHeight * 2 - 1; ++k) {
+            for (; t < ActualWidth * 2 - 1; ++t) {
+              int i = k % (ActualHeight - 1);
+              int j = t % (ActualWidth - 1);
               if (maze[i, j] != null && maze[i, j] is Node) {
                 if (!((Node)maze[i, j]).IsVisited && ((Node)maze[i, j]).HasVisitedNeighbour()) {
                   current = (Node)maze[i, j];
@@ -417,8 +417,8 @@ namespace MazeBuilderNS {
 
     public string toString() {
       string str = "";
-      for (int i = 0; i < trueHeight; i++) {
-        for (int j = 0; j < trueWidth; j++) {
+      for (int i = 0; i < actualHeight; i++) {
+        for (int j = 0; j < actualWidth; j++) {
           if (maze[i, j] == null)
             str += "░";
           else if (maze[i, j].State == NodeState.Wall)
