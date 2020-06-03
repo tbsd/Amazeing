@@ -1,18 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-// using MazeElementNS
 
 namespace Graph {
 
   public class Node : MazeElement {
 
-    // private List<Node> neighbour = new List<Node>();
     private List<Wall> walls = new List<Wall>();
-    // private List<bool> Wall = new List<bool>();
-    // private List<WallDirection> direction = new List<WallDirection>();
-    // public int Index {get; set;} = -1;
-    // public NodeState State {get; set;} = NodeState.Wall;
     public bool IsVisited {get; set;} = false;
 
     public Node() {
@@ -31,13 +25,6 @@ namespace Graph {
     public Node goToRandomNeighbour() {
       System.Random rng = new System.Random();
       int unvisetedCount = walls.Where(w => w.getConnected(this) != null && !w.getConnected(this).IsVisited).Count();
-      // int unvisetedCount = 0;
-      // Debug.Log("capacity: " + walls.Capacity);
-      // for (int i = 0; i < walls.Capacity; ++i) {
-        // Debug.Log(i);
-        // if (!walls[i].getConnected(this).IsVisited)
-          // ++unvisetedCount;
-      // }
       if (unvisetedCount == 0)
         return null;
       int selected = rng.Next(0, unvisetedCount);
