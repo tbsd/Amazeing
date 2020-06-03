@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49fa8fe2175259a43aab188776873c67, type: 3}
+  m_Name: NewCameraSettings
+  m_EditorClassIdentifier: 
+  OffsetHeight: 1.5
+  LateralOffset: 0
+  MaxLateralOffset: 5
+  OffsetDistance: 4.5
+  MaxDistance: 15
+  MinDistance: 1
+  ZoomSpeed: 10
+  ResetSpeed: 5
+  RotateSpeed: 15
+  MaxRotX: 90
+  MinRotX: -90

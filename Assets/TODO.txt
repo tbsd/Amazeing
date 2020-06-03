@@ -1,0 +1,14 @@
+Remove unused files
+Remove unused assets
+Remove unused code and comments
+Fix walking through edge/ Now can't walk through edge.
+
+
+
+
+
+
+
+
+
+
