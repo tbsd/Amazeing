@@ -2,7 +2,7 @@ using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace Graph {
+namespace MazeNs {
   public class Wall : MazeElement {
     private List<Node> connected = new List<Node>(); 
 

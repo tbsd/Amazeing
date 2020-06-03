@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Graph;
+using MazeNs;
 using UnityEngine;
 
 namespace MazeBuilderNS {

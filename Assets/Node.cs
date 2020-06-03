@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-namespace Graph {
+namespace MazeNs {
 
   public class Node : MazeElement {
 

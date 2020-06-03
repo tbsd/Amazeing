@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System;
 using System.Collections.Generic;
-using Graph;
+using MazeNs;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;

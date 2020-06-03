@@ -1,4 +1,4 @@
-﻿namespace Graph {
+﻿namespace MazeNs {
   public enum WallDirection {
     Up,
     Right,
