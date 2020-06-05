@@ -5,7 +5,7 @@ using MazeNs;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using MazeBuilderNS;
+using MazeBuilderNs;
 
 
 public class Maze : MonoBehaviour

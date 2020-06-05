@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using MazeNs;
 using UnityEngine;
 
-namespace MazeBuilderNS {
+namespace MazeBuilderNs {
   public enum Shape {
     Cyllinder,
     Box,
