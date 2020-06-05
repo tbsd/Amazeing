@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MazeNs;
+using MazeBuilderNs;
  
 public class PlayerScript : MonoBehaviour
 {
@@ -9,6 +11,7 @@ public class PlayerScript : MonoBehaviour
     public GameObject Camera;
     public GameObject PlayerPlaceholder;
     public Joystick playerJoystick;
+    private Shape shape;
  
  
     public float speed = 0.1f;
@@ -28,6 +31,8 @@ public class PlayerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+		//shape = Shape.Box;
+        shape = Planet.GetComponent<Maze>().shape;
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
     }
