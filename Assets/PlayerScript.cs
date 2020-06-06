@@ -11,21 +11,12 @@ public class PlayerScript : MonoBehaviour
     public GameObject Camera;
     public GameObject PlayerPlaceholder;
     public Joystick playerJoystick;
-    private Shape shape;
- 
- 
     public float speed = 0.1f;
     public float JumpHeight = 1.2f;
  
-    float gravity = 500;
-    bool OnGround = false;
- 
- 
-    float distanceToGround;
-    Vector3 Groundnormal;
- 
- 
- 
+    private Shape shape;
+	private float rotationSpeed;
+	private bool collideingWall;
     private Rigidbody rb;
  
     // Start is called before the first frame update
@@ -35,84 +26,76 @@ public class PlayerScript : MonoBehaviour
         shape = Planet.GetComponent<Maze>().shape;
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+		rotationSpeed = speed * 360 / (Mathf.PI * Planet.transform.lossyScale.x / transform.localScale.x);
     }
- 
-    void FixedUpdate() {
 
-    }
     // Update is called once per frame
     void Update() {
-		// Gravity
-      	getInput();
-        RaycastHit hit = new RaycastHit();
-        bool hasHit = false;
-        if (Physics.Raycast(transform.position, -transform.up, out hit, 10)) {
-            hasHit = true;
-            distanceToGround = hit.distance;
-            if (distanceToGround <= 0.2 + transform.localScale.y / 2f) 
-                OnGround = true;
-            else 
-                OnGround = false;
-          if (hit.transform == Planet.transform)
-            Groundnormal = hit.normal;
-          else {
-            Groundnormal = (transform.position - Planet.transform.position).normalized;
-            OnGround = false;
-          }
-        Debug.DrawRay(transform.position, (hit.transform.position - transform.position), Color.red, 5f);
-        } else {
-          OnGround = false;
-          bool isSideHit = false;
-          if (Physics.Raycast(transform.position, -transform.forward, out hit, 10))
-            isSideHit = true;
-          else if (isSideHit = Physics.Raycast(transform.position, transform.forward, out hit, 10))
-            isSideHit = true;
-          else if (Physics.Raycast(transform.position, transform.right, out hit, 10))
-            isSideHit = true;
-          else if (Physics.Raycast(transform.position, -transform.right, out hit, 10))
-            isSideHit = true;
-          if (isSideHit) {
-              distanceToGround = hit.distance;
-            if (hit.transform == Planet.transform)
-              Groundnormal = hit.normal;
-            else {
-              Groundnormal = (transform.position - Planet.transform.position).normalized;
-              OnGround = false;
-            }
-          Debug.DrawRay(transform.position, (hit.transform.position - transform.position), Color.red, 5f);
-          }
-        }
-        Vector3 gravDirection;
-        if (hasHit)
-          gravDirection = (transform.position - hit.point).normalized;
-        else
-          gravDirection = (transform.position - Planet.transform.position).normalized;
- 
-        if (!OnGround) {
-            rb.AddForce(gravDirection * -gravity);
-        }
- 
-        float angle = Quaternion.Angle(Quaternion.identity, Quaternion.FromToRotation(transform.up, Groundnormal));
-        if (true) {
-          Quaternion toRotation = Quaternion.FromToRotation(transform.up, Groundnormal) * transform.rotation;
-          transform.rotation = toRotation;
-        }
- 
+		movePlayer(getInput());
  
     }
+	private void movePlayer(Vector3 direction) {
+		direction = wallsEvasion(direction);
+		switch(shape) {
+			case Shape.Sphere:
+				sphereMove(direction);
+			break;
+            case Shape.Box:
+				boxMove(direction);
+            break;
+            case Shape.Cyllinder:
+				cylinderMove(direction);
+            break;
+        }
+    }
 
-    private void getInput() {
+	void cylinderMove(Vector3 direction) {
+		rb.velocity = new Vector3(direction.x, 0, 0);
+        transform.RotateAround(Planet.transform.localPosition, Planet.transform.up, direction.z * rotationSpeed * Time.deltaTime);
+    }
+
+	void sphereMove(Vector3 direction) {
+		//rb.AddForce(direction);
+    }
+	
+	void boxMove(Vector3 direction) {
+		rb.velocity = direction;
+		// TODO: check edges
+	}
+	
+	// use this instead of standard collisions because they don't work propertly
+	// when objects are not at 90 degreees angle to each other
+	Vector3 wallsEvasion(Vector3 direction) {
+		float distance = 0.3f;
+		Vector3 result = direction;
+        RaycastHit hit = new RaycastHit();
+        if (Physics.Raycast(transform.position, transform.forward, out hit, distance))
+			if (direction.z < 0 && hit.collider.tag == "wall")
+				result.z = 0;
+        if (Physics.Raycast(transform.position, -transform.forward, out hit, distance))
+			if (direction.z > 0 && hit.collider.tag == "wall")
+				result.z = 0;
+        if (Physics.Raycast(transform.position, transform.right, out hit, distance))
+			if (direction.x > 0 && hit.collider.tag == "wall")
+				result.x = 0;
+        if (Physics.Raycast(transform.position, -transform.right, out hit, distance))
+			if (direction.x < 0 && hit.collider.tag == "wall")
+				result.x = 0;
+		return result;
+		
+    }
+
+    Vector3 getInput() {
         float x = 0;
         float z = 0;
         if (playerJoystick.Horizontal >= 0.2f)
           x = speed;
         if (playerJoystick.Vertical >= 0.2f)
-          z = speed;
+          z = -speed;
         if (playerJoystick.Horizontal <= -0.2f)
           x = -speed;
         if (playerJoystick.Vertical <= -0.2f)
-          z = -speed;
-        Vector3 move = rb.transform.TransformDirection(new Vector3(x, 0, z));
-        rb.velocity = move;
+          z = speed;
+        return new Vector3(x, 0, z);
     }
 }
