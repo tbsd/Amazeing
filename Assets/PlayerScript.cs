@@ -55,7 +55,9 @@ public class PlayerScript : MonoBehaviour
     }
 
 	void sphereMove(Vector3 direction) {
-		//rb.AddForce(direction);
+		rb.velocity = Vector3.zero;
+        transform.RotateAround(Planet.transform.position, transform.forward, direction.x * rotationSpeed * Time.deltaTime);
+        transform.RotateAround(Planet.transform.position, Planet.transform.right, direction.z * rotationSpeed * Time.deltaTime);
     }
 	
 	void boxMove(Vector3 direction) {
