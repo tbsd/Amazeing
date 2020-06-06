@@ -29,10 +29,11 @@ public class CameraScript : MonoBehaviour
         float up = camJoystick.Horizontal * camSpeed;
         transform.RotateAround(planet.transform.position, transform.up, up);
         transform.RotateAround(planet.transform.position, transform.right, right);
-        float d = 0.1f;
+        /*float d = 0.1f;
         float fov = 90;
-        fov += Input.GetAxis("Mouse ScrollWheel") * -sensitivity;
+        fov += Input.GetAxis("not realy needed") * -sensitivity;
         fov = Mathf.Clamp(fov, minFov, maxFov);
+        */
  
     }
 
