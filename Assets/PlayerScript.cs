@@ -56,8 +56,8 @@ public class PlayerScript : MonoBehaviour
 
 	void sphereMove(Vector3 direction) {
 		rb.velocity = Vector3.zero;
-        transform.RotateAround(Planet.transform.position, transform.forward, direction.x * rotationSpeed * Time.deltaTime);
-        transform.RotateAround(Planet.transform.position, Planet.transform.right, direction.z * rotationSpeed * Time.deltaTime);
+        transform.RotateAround(Planet.transform.position, -transform.forward, direction.x * rotationSpeed * Time.deltaTime);
+        transform.RotateAround(Planet.transform.position, Planet.transform.up, direction.z * rotationSpeed * Time.deltaTime);
     }
 	
 	void boxMove(Vector3 direction) {
@@ -65,8 +65,8 @@ public class PlayerScript : MonoBehaviour
 		// TODO: check edges
 	}
 	
-	// use this instead of standard collisions because they don't work propertly
-	// when objects are not at 90 degreees angle to each other
+	// use this instead of standard collision system because it doesn't work
+	// propertly on curved surfaces
 	Vector3 wallsEvasion(Vector3 direction) {
 		float distance = 0.3f;
 		Vector3 result = direction;
@@ -83,9 +83,29 @@ public class PlayerScript : MonoBehaviour
         if (Physics.Raycast(transform.position, -transform.right, out hit, distance))
 			if (direction.x < 0 && hit.collider.tag == "wall")
 				result.x = 0;
+        if (Physics.Raycast(transform.position, transform.forward + transform.right, out hit, distance))
+			if ((direction.z < 0 && direction.x > 0) && hit.collider.tag == "wall") {
+				result.z = 0;
+				result.x = 0;
+            }
+        if (Physics.Raycast(transform.position, -transform.forward + transform.right, out hit, distance))
+			if ((direction.z > 0 && direction.x > 0) && hit.collider.tag == "wall") {
+				result.z = 0;
+				result.x = 0;
+            }
+        if (Physics.Raycast(transform.position, transform.forward - transform.right, out hit, distance))
+			if ((direction.z < 0 && direction.x < 0) && hit.collider.tag == "wall") {
+				result.z = 0;
+				result.x = 0;
+            }
+        if (Physics.Raycast(transform.position, -transform.forward - transform.right, out hit, distance))
+			if ((direction.z > 0 && direction.x < 0) && hit.collider.tag == "wall") {
+				result.z = 0;
+				result.x = 0;
+            }
 		return result;
-		
     }
+	
 
     Vector3 getInput() {
         float x = 0;
@@ -99,5 +119,10 @@ public class PlayerScript : MonoBehaviour
         if (playerJoystick.Vertical <= -0.2f)
           z = speed;
         return new Vector3(x, 0, z);
+    }
+
+	void OnCollisionEnter(Collision col) {
+		if (col.collider.tag == "wall")
+			rb.velocity = Vector3.zero;
     }
 }
