@@ -26,7 +26,7 @@ public class Maze : MonoBehaviour
         boxMaze(10);
         break;
       case Shape.Sphere: 
-        sphereMaze(10);
+        sphereMaze(7);
         break;
      }
   }
@@ -47,19 +47,6 @@ public class Maze : MonoBehaviour
         SceneManager.LoadScene("CylinderScene");
       }
     }
-  }
-
-  void printCharArr(char[,] arr, int h, int w) {
-    
-    string str = "";
-    for (int i = 0; i < h; ++i) {
-      for (int j = 0; j < w; ++j) {
-        str += arr[i, j];
-      }
-      str += '\n';
-    }
-
-    Debug.Log(str);
   }
 
   private void sphereMaze(int radius) {
@@ -274,7 +261,7 @@ public class Maze : MonoBehaviour
     Vector3 minZ = new Vector3(0, 0, 0);
     Vector3 maxZ = new Vector3(0, 0, 0);
     GameObject builder = Instantiate(GameObject.CreatePrimitive(PrimitiveType.Sphere), Planet.transform);
-    Vector3 wallScale = new Vector3(16.0f / height, 1, 1.2f * (Mathf.PI * 2 * 8 * 0.5f / width));
+    Vector3 wallScale = new Vector3(16.0f / height, wallObject.transform.lossyScale.y, 1.2f * (Mathf.PI * 2 * 8 * 0.5f / width));
     Vector3 minPos = new Vector3(-0.5f, -1 + 1f / height, 0);
     Vector3 maxPos = new Vector3(-0.5f, 1 + 1f / height, 0);
     builder.transform.localPosition = minPos;
@@ -288,7 +275,7 @@ public class Maze : MonoBehaviour
       for (int j = 0; j < width; ++j) {
         if(graph[i, j].State == NodeState.Wall) {
           GameObject wallPart = GameObject.Instantiate(wallObject);
-          wallPart.GetComponent<BoxCollider>().size += new Vector3(0, 3, 0);
+          // wallPart.GetComponent<BoxCollider>().size += new Vector3(0, 3, 0);
           wallPart.transform.localScale = wallScale;
           if (i == 0 || i == height - 1) 
             wallPart.transform.localScale += new Vector3(wallScale.x / 10f, 0, 0);
@@ -299,6 +286,11 @@ public class Maze : MonoBehaviour
           Finish.transform.localScale = wallScale - new Vector3(0, 0.1f, 0);
           Finish.transform.position = builder.transform.position;
           Finish.transform.rotation = builder.transform.rotation;
+        } else if (!isPlayerSet && i > height / 2 && j > width / 2) {
+          // Player.transform.RotateAround(Planet.transform.position, Player.transform.up, j * rotStep);
+          // Player.transform.position = builder.transform.position;
+          // Player.transform.rotation = builder.transform.rotation;
+          // isPlayerSet = true;
         } 
         builder.transform.RotateAround(Planet.transform.localPosition, Planet.transform.up, rotStep);
       }
