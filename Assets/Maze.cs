@@ -141,7 +141,11 @@ public class Maze : MonoBehaviour
           Finish.transform.position = builder.transform.position;
           Finish.transform.rotation = builder.transform.rotation;
           Finish.transform.SetParent(null);
-        } 
+        } else if (mazePart.State == NodeState.Start) {
+            Player.transform.position = builder.transform.position;
+            Player.transform.rotation = builder.transform.rotation;
+          }
+
         builder.transform.RotateAround(Planet.transform.localPosition, Planet.transform.up, hRotationStep);
         xPos = xNext;
         yPos = yNext;
@@ -238,7 +242,10 @@ public class Maze : MonoBehaviour
             Finish.transform.position = builder.transform.position;
             Finish.transform.rotation = builder.transform.rotation;
             Finish.transform.SetParent(null);
-          } 
+          } else if (graph[i, j].State == NodeState.Start) {
+            Player.transform.position = builder.transform.position;
+            Player.transform.rotation = builder.transform.rotation;
+          }
           builder.transform.localPosition += hStep;
         }
       }
@@ -291,7 +298,11 @@ public class Maze : MonoBehaviour
           // Player.transform.position = builder.transform.position;
           // Player.transform.rotation = builder.transform.rotation;
           // isPlayerSet = true;
-        } 
+        } else if (graph[i, j].State == NodeState.Start) {
+            Player.transform.position = builder.transform.position;
+            Player.transform.rotation = builder.transform.rotation;
+          }
+
         builder.transform.RotateAround(Planet.transform.localPosition, Planet.transform.up, rotStep);
       }
       builder.transform.localPosition += new Vector3(0, posStep, 0);

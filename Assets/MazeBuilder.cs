@@ -354,14 +354,17 @@ namespace MazeBuilderNs {
       int x = 0;
       int y = 0;
       Node current = null;
-      for (int i = 1; i < ActualHeight - 1; ++i) {
-        for (int j = 0; j < ActualWidth - 1; ++j) {
+      for (int i = ActualHeight / 2; i < ActualHeight - 1; ++i) {
+        for (int j = ActualWidth / 2 + 1; j < ActualWidth - 1; ++j) {
           MazeElement start = maze[i, j];
           if (start != null && start is Node) {
             current = (Node)start;
+            current.State = NodeState.Start;
             break;
           }
+          Debug.Log(1);
         }
+        Debug.Log(2);
         if (current != null)
           break;
       }
@@ -384,7 +387,6 @@ namespace MazeBuilderNs {
             last.State = NodeState.Finish;
             isFinishSet = true;
           }
-
           // loop through maze starting from random place
           int k = rng.Next(0, ActualHeight);
           int t = rng.Next(0, ActualWidth);
@@ -413,6 +415,10 @@ namespace MazeBuilderNs {
         isFinishSet = true;
         }
       Debug.Log(toString());
+    }
+
+    public void binaryTree() {
+      
     }
 
     public string toString() {
