@@ -6,18 +6,22 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using MazeBuilderNs;
+using GlobalsNs;
 
 
 public class Maze : MonoBehaviour
 {
   public Shape shape;
-  public MazeType type;
+  public MazeType type = MazeType.HuntAndKill;
   public GameObject Planet;
   public GameObject Player;
   public GameObject Finish;
   public GameObject wallObject;
 
   void Start() {
+    Globals globals = new Globals();
+    MazeType type = Globals.mazeType;
+    Debug.Log(type);
     Screen.orientation = ScreenOrientation.LandscapeRight;
     switch(shape) { 
       case Shape.Cyllinder:
@@ -30,6 +34,7 @@ public class Maze : MonoBehaviour
         sphereMaze(7);
         break;
      }
+    Globals.mazeType = MazeType.HuntAndKill;
   }
 
   void Update() {
