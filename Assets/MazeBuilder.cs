@@ -10,6 +10,11 @@ namespace MazeBuilderNs {
     Sphere
   }
 
+  public enum MazeType {
+    HuntAndKill,
+    BinaryTree
+  }
+
   public class MazeBuilder {
     private MazeElement[,] maze;
     public int Height {get;set;}
@@ -303,12 +308,14 @@ namespace MazeBuilderNs {
       maze = new MazeElement[ActualHeight, ActualWidth];
       for (int i = 0; i < ActualHeight; ++i) {
         for (int j = 0; j < ActualWidth; ++j) {
-          if (i % 2 == 0 || j % 2 == 0 || i == 0 || i == ActualHeight - 1) {
+          if (i % 2 == 0 || j % 2 == 0 ) {
             maze[i, j] = new Wall();
           }
           else { 
             maze[i, j] = new Node();
           }
+          if (i == 0 || i == ActualHeight - 1)
+            maze[i, j].State = NodeState.Border;
         }
       }
       for (int i = 1; i < ActualHeight - 1; ++i) {
@@ -417,8 +424,119 @@ namespace MazeBuilderNs {
       Debug.Log(toString());
     }
 
-    public void binaryTree() {
-      
+    public void BinaryTree() {
+      System.Random rng = new System.Random();
+      int x = 0;
+      int y = 0;
+      Node current = null;
+      for (int i = ActualHeight / 2; i < ActualHeight - 1; ++i) {
+        for (int j = ActualWidth / 2 + 1; j < ActualWidth - 1; ++j) {
+          MazeElement start = maze[i, j];
+          if (start != null && start is Node) {
+            current = (Node)start;
+            current.State = NodeState.Start;
+            break;
+          }
+        }
+        if (current != null)
+          break;
+      }
+      //add finish
+      bool isFinishSet = false;
+      for (int i = rng.Next(0, ActualHeight / 2); i < ActualHeight - 1; ++i) {
+        for (int j = rng.Next(0, ActualHeight / 2 + 1); j < ActualWidth - 1; ++j) {
+          MazeElement end = maze[i, j];
+          if (end != null && end is Node) {
+            end.State = NodeState.Finish;
+            isFinishSet = true;
+            break;
+          }
+        }
+        if (isFinishSet)
+          break;
+      }
+      //add start
+      int stepsCount = 0;
+      // Node last;
+      for (int posY = 0; posY < ActualHeight - 1; ++posY) {
+        for (int posX = 0; posX < ActualWidth - 1; ++posX) {
+          if (!(maze[posY, posX] is Node))
+            continue;
+          current = (Node)maze[posY, posX];
+          current.IsVisited = true;
+          // last = current;
+          if (stepsCount < StepsLimit) {
+            // !!!!!!!!!!!!!!сделать костыль для стенок слева и сверху в крайних рядах
+            // choose wall to remove
+            Wall right = null;
+            Wall bottom = null;
+            List<Wall> walls = current.getWalls();
+            foreach (Wall wall in walls) {
+              if (wall.State == NodeState.Border)
+                continue;
+              // Node connected = wall.getConnected(current);
+              // if (posX + 2 < ActualWidth && maze[posY, posX + 2] != null && connected == (Node)maze[posY, posX + 2])
+              if (posX + 1 < ActualWidth && maze[posY, posX + 1] == wall)
+                right = wall;
+              // else if (posY + 2 < ActualHeight && maze[posY + 2, posX] != null && connected == (Node)maze[posY + 2, posX])
+              else if (posY + 1 < ActualHeight && maze[posY + 1, posX] == wall)
+                bottom = wall;
+              // for not adjacent walls
+              // else if (posX > 0 && maze[posY, posX - 1] != null &&
+                  // wall == (Wall)maze[posY, posX - 1])
+            }
+            if (right == null && bottom != null) {
+              bottom.State = NodeState.Path;
+            } else if (bottom == null && right != null) {
+              right.State = NodeState.Path;
+            } else if (right != null && bottom != null){
+              if (rng.Next(0, 2) == 0) {
+                bottom.State = NodeState.Path;
+              } else {
+                right.State = NodeState.Path;
+              }
+            }
+            ++stepsCount;
+          } else {
+            current = null;
+            stepsCount = 0;
+          }
+          if (current == null) {
+            //create finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finish
+            // if (!isFinishSet && rng.Next(0, 5) == 0) {
+              // last.State = NodeState.Finish;
+              // isFinishSet = true;
+            // }
+            // loop through maze starting from random place
+            int k = rng.Next(0, ActualHeight);
+            int t = rng.Next(0, ActualWidth);
+            for (; k < ActualHeight * 2 - 1; ++k) {
+              for (; t < ActualWidth * 2 - 1; ++t) {
+                int i = k % (ActualHeight - 1);
+                int j = t % (ActualWidth - 1);
+                if (maze[i, j] != null && maze[i, j] is Node) {
+                  if (!((Node)maze[i, j]).IsVisited && ((Node)maze[i, j]).HasVisitedNeighbour()) {
+                    current = (Node)maze[i, j];
+                    current.removeWallWithVisited();
+                    break;
+                  }
+                }
+              }
+              t = 0;
+              if (current != null)
+                break;
+            }
+          }
+          if (current == null)
+            break;
+        }
+      }
+            //create finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finishcreate finish
+      // if (!isFinishSet && last != null) {
+        // last.State = NodeState.Finish;
+        // isFinishSet = true;
+        // }
+      Debug.Log(toString());
     }
 
     public string toString() {

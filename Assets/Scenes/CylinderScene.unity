@@ -453,7 +453,6 @@ MonoBehaviour:
   PlayerPlaceholder: {fileID: 0}
   playerJoystick: {fileID: 1342402215}
   speed: 4
-  JumpHeight: 1.2
 --- !u!65 &571463354
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1572,6 +1571,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shape: 0
+  type: 1
   Planet: {fileID: 1958964007}
   Player: {fileID: 571463351}
   Finish: {fileID: 328915219}

@@ -230,6 +230,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shape: 1
+  type: 1
   Planet: {fileID: 46866559}
   Player: {fileID: 1721350191}
   Finish: {fileID: 1172082252}

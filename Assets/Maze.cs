@@ -11,6 +11,7 @@ using MazeBuilderNs;
 public class Maze : MonoBehaviour
 {
   public Shape shape;
+  public MazeType type;
   public GameObject Planet;
   public GameObject Player;
   public GameObject Finish;
@@ -34,6 +35,17 @@ public class Maze : MonoBehaviour
   void Update() {
     playerIsOnFinish();
   }
+
+  void generateMaze(MazeBuilder mazeBuilder) {
+    switch (type) {
+      case MazeType.HuntAndKill:
+        mazeBuilder.HuntAndKill();
+        break;
+      case MazeType.BinaryTree:
+        mazeBuilder.BinaryTree();
+        break;
+    }
+  }
    
   public void playerIsOnFinish() {
     if (Finish.GetComponent<PlayerDetection>().isColliding) {
@@ -52,7 +64,7 @@ public class Maze : MonoBehaviour
   private void sphereMaze(int radius) {
     MazeBuilder mazeBuilder = new MazeBuilder(radius);
     mazeBuilder.InitMaze(Shape.Sphere);
-    mazeBuilder.HuntAndKill();
+    generateMaze(mazeBuilder);
     Debug.Log(mazeBuilder.toString());
     int topRadius = mazeBuilder.ActualHeight / 2 + 1;
     int bottomRadius = mazeBuilder.ActualHeight / 2;
@@ -161,7 +173,7 @@ public class Maze : MonoBehaviour
   void boxMaze(int edgeSize) {
     MazeBuilder mazeBuilder = new MazeBuilder(edgeSize);
     mazeBuilder.InitMaze(Shape.Box);
-    mazeBuilder.HuntAndKill();
+    generateMaze(mazeBuilder);
     MazeElement[,] graph = mazeBuilder.Maze;
     int actualEdge = edgeSize * 2;
     GameObject builder = Instantiate(GameObject.CreatePrimitive(PrimitiveType.Sphere), Planet.transform);
@@ -257,7 +269,7 @@ public class Maze : MonoBehaviour
   void cylinderMaze(int mazeWidth, int mazeHeight) {
     MazeBuilder mazeBuilder = new MazeBuilder(mazeHeight, mazeWidth);
     mazeBuilder.InitMaze(Shape.Cyllinder);
-    mazeBuilder.HuntAndKill();
+    generateMaze(mazeBuilder);
     MazeElement[,] graph = mazeBuilder.Maze;
     int height = mazeBuilder.ActualHeight;
     int width = mazeBuilder.ActualWidth;
@@ -280,7 +292,7 @@ public class Maze : MonoBehaviour
     bool isPlayerSet = false;
     for (int i = 0; i < height; ++i) {
       for (int j = 0; j < width; ++j) {
-        if(graph[i, j].State == NodeState.Wall) {
+        if(graph[i, j].State == NodeState.Wall || graph[i, j].State == NodeState.Border) {
           GameObject wallPart = GameObject.Instantiate(wallObject);
           // wallPart.GetComponent<BoxCollider>().size += new Vector3(0, 3, 0);
           wallPart.transform.localScale = wallScale;

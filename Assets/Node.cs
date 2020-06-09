@@ -22,6 +22,10 @@ namespace MazeNs {
       return walls[i];
     }
 
+    public List<Wall> getWalls() {
+      return walls;
+    }
+
     public Node goToRandomNeighbour() {
       System.Random rng = new System.Random();
       int unvisetedCount = walls.Where(w => w.getConnected(this) != null && !w.getConnected(this).IsVisited).Count();
