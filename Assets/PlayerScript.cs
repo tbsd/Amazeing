@@ -55,8 +55,8 @@ public class PlayerScript : MonoBehaviour
 
 	void sphereMove(Vector3 direction) {
 		rb.velocity = Vector3.zero;
-        transform.RotateAround(Planet.transform.position, -transform.forward, direction.x * rotationSpeed * Time.deltaTime);
-        transform.RotateAround(Planet.transform.position, Planet.transform.up, direction.z * rotationSpeed * Time.deltaTime);
+        transform.RotateAround(Planet.transform.position, Planet.transform.forward, direction.z * rotationSpeed * Time.deltaTime);
+        transform.RotateAround(Planet.transform.position, -Planet.transform.up, direction.x * rotationSpeed * Time.deltaTime);
     }
 
     float gravity = 80;
