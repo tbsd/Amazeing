@@ -545,10 +545,10 @@ namespace MazeBuilderNs {
         for (int j = 0; j < actualWidth; j++) {
           if (maze[i, j] == null)
             str += "░";
-          else if (maze[i, j].State == NodeState.Wall)
-            str += "▓";
-          else
+          else if (maze[i, j].State == NodeState.Path)
             str += "▒";
+          else
+            str += "▓";
         }
         str += "\n";
       }
