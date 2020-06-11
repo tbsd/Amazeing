@@ -12,16 +12,14 @@ using GlobalsNs;
 public class Maze : MonoBehaviour
 {
   public Shape shape;
-  public MazeType type = MazeType.HuntAndKill;
+  public MazeType type;
   public GameObject Planet;
   public GameObject Player;
   public GameObject Finish;
   public GameObject wallObject;
 
   void Start() {
-    Globals globals = new Globals();
-    MazeType type = Globals.mazeType;
-    Debug.Log(type);
+    type = Globals.mazeType;
     Screen.orientation = ScreenOrientation.LandscapeRight;
     switch(shape) { 
       case Shape.Cyllinder:
@@ -42,6 +40,8 @@ public class Maze : MonoBehaviour
   }
 
   void generateMaze(MazeBuilder mazeBuilder) {
+    Debug.Log("TYPE");
+    Debug.Log(type);
     switch (type) {
       case MazeType.HuntAndKill:
         mazeBuilder.HuntAndKill();
