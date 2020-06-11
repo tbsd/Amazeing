@@ -336,23 +336,25 @@ namespace MazeBuilderNs {
               Wall wall = (Wall)maze[i, j - 1];
               cell.AddWall(wall);
               wall.AddConnected(cell);
-            } else if (maze[i, ActualWidth - 1] is Wall) {
-              Wall wall = (Wall)maze[i, ActualWidth - 1];
-              cell.AddWall(wall);
-              wall.AddConnected(cell);
-            }
+            } 
             if (j + 1 < ActualWidth && maze[i, j + 1] is Wall) {
               Wall wall = (Wall)maze[i, j + 1];
               cell.AddWall(wall);
               wall.AddConnected(cell);
-            } else if (maze[i, 0] is Wall) {
-              Wall wall = (Wall)maze[i, 0];
-              cell.AddWall(wall);
-              wall.AddConnected(cell);
-            }
+            } 
           }
         }
       }
+      for (int i = 0; i < ActualHeight; ++i)
+        if (maze[i, ActualWidth - 1] is Node) {
+              Wall wall = (Wall)maze[i, 0];
+              Node cell1 = (Node)maze[i, ActualWidth - 1];
+              Node cell2 = (Node)maze[i, 1];
+              cell1.AddWall(wall);
+              cell2.AddWall(wall);
+              wall.AddConnected(cell1);
+              wall.AddConnected(cell2);
+        }
     }
 
 
