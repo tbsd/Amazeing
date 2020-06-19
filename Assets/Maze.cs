@@ -26,7 +26,7 @@ public class Maze : MonoBehaviour
         cylinderMaze(10, 10);
         break;
       case Shape.Box:
-        boxMaze(10);
+        boxMaze(5);
         break;
       case Shape.Sphere: 
         sphereMaze(7);
