@@ -151,63 +151,63 @@ public class PlayerScript : MonoBehaviour
   Vector3 wallsEvasion(Vector3 direction) {
     float distance = 0.3f;
     Vector3 result = direction;
-        RaycastHit hit = new RaycastHit();
-        if (Physics.Raycast(transform.position, transform.forward, out hit, distance))
+    RaycastHit hit = new RaycastHit();
+    if (Physics.Raycast(transform.position, transform.forward, out hit, distance))
       if (direction.z < 0 && hit.collider.tag == "wall")
         result.z = 0;
-        if (Physics.Raycast(transform.position, -transform.forward, out hit, distance))
+    if (Physics.Raycast(transform.position, -transform.forward, out hit, distance))
       if (direction.z > 0 && hit.collider.tag == "wall")
         result.z = 0;
-        if (Physics.Raycast(transform.position, transform.right, out hit, distance))
+    if (Physics.Raycast(transform.position, transform.right, out hit, distance))
       if (direction.x > 0 && hit.collider.tag == "wall")
         result.x = 0;
-        if (Physics.Raycast(transform.position, -transform.right, out hit, distance))
+    if (Physics.Raycast(transform.position, -transform.right, out hit, distance))
       if (direction.x < 0 && hit.collider.tag == "wall")
         result.x = 0;
-        if (Physics.Raycast(transform.position, transform.forward + transform.right, out hit, distance))
+    if (Physics.Raycast(transform.position, transform.forward + transform.right, out hit, distance))
       if ((direction.z < 0 && direction.x > 0) && hit.collider.tag == "wall") {
         result.z = 0;
         result.x = 0;
-            }
-        if (Physics.Raycast(transform.position, -transform.forward + transform.right, out hit, distance))
+      }
+    if (Physics.Raycast(transform.position, -transform.forward + transform.right, out hit, distance))
       if ((direction.z > 0 && direction.x > 0) && hit.collider.tag == "wall") {
         result.z = 0;
         result.x = 0;
-            }
-        if (Physics.Raycast(transform.position, transform.forward - transform.right, out hit, distance))
+      }
+    if (Physics.Raycast(transform.position, transform.forward - transform.right, out hit, distance))
       if ((direction.z < 0 && direction.x < 0) && hit.collider.tag == "wall") {
         result.z = 0;
         result.x = 0;
-            }
-        if (Physics.Raycast(transform.position, -transform.forward - transform.right, out hit, distance))
+      }
+    if (Physics.Raycast(transform.position, -transform.forward - transform.right, out hit, distance))
       if ((direction.z > 0 && direction.x < 0) && hit.collider.tag == "wall") {
         result.z = 0;
         result.x = 0;
-            }
+      }
     return result;
-    }
+  }
 
-    Vector3 getVelocity() {
-      Vector3 input = getInput();
-      float x = 0;
-      float z = 0;
-      if (input.x >= 0.2f)
-        x = speed;
-      if (input.z >= 0.2f)
-        z = speed;
-      if (input.x <= -0.2f)
-        x = -speed;
-      if (input.z <= -0.2f)
-        z = -speed;
-      return new Vector3(x, 0, z);
-    }
+  Vector3 getVelocity() {
+    Vector3 input = getInput();
+    float x = 0;
+    float z = 0;
+    if (input.x >= 0.2f)
+      x = speed;
+    if (input.z >= 0.2f)
+      z = speed;
+    if (input.x <= -0.2f)
+      x = -speed;
+    if (input.z <= -0.2f)
+      z = -speed;
+    return new Vector3(x, 0, z);
+  }
 
-    Vector3 getInput() {
-      return new Vector3(playerJoystick.Horizontal, 0, -playerJoystick.Vertical);
-    }
+  Vector3 getInput() {
+    return new Vector3(playerJoystick.Horizontal, 0, -playerJoystick.Vertical);
+  }
 
   void OnCollisionEnter(Collision col) {
     if (col.collider.tag == "wall")
       rb.velocity = Vector3.zero;
-    }
+  }
 }
