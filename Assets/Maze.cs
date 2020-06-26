@@ -73,7 +73,8 @@ public class Maze : MonoBehaviour
     Debug.Log(mazeBuilder.toString());
     int topRadius = mazeBuilder.ActualHeight / 2 + 1;
     int bottomRadius = mazeBuilder.ActualHeight / 2;
-    GameObject builder = Instantiate(GameObject.CreatePrimitive(PrimitiveType.Sphere), Planet.transform);
+    GameObject builder = GameObject.CreatePrimitive(PrimitiveType.Cube);
+    builder.transform.SetParent(Planet.transform);
     builder.transform.rotation = Quaternion.identity;
     builder.transform.localPosition = new Vector3(0, 0.5f, 0);
     builder.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
@@ -181,7 +182,8 @@ public class Maze : MonoBehaviour
     generateMaze(mazeBuilder);
     MazeElement[,] graph = mazeBuilder.Maze;
     int actualEdge = edgeSize * 2;
-    GameObject builder = Instantiate(GameObject.CreatePrimitive(PrimitiveType.Sphere), Planet.transform);
+    GameObject builder = GameObject.CreatePrimitive(PrimitiveType.Cube);
+    builder.transform.SetParent(Planet.transform);
     builder.transform.rotation = Quaternion.identity;
     Vector3 wallScale = new Vector3(1f / actualEdge, 1f / actualEdge, 1f / actualEdge);
     float posStep = 1.0f / actualEdge;
@@ -284,7 +286,8 @@ public class Maze : MonoBehaviour
     Vector3 maxY = new Vector3(0, 1, 0);
     Vector3 minZ = new Vector3(0, 0, 0);
     Vector3 maxZ = new Vector3(0, 0, 0);
-    GameObject builder = Instantiate(GameObject.CreatePrimitive(PrimitiveType.Sphere), Planet.transform);
+    GameObject builder = GameObject.CreatePrimitive(PrimitiveType.Cube);
+    builder.transform.SetParent(Planet.transform);
     Vector3 wallScale = new Vector3(16.0f / height, wallObject.transform.lossyScale.y, 1.2f * (Mathf.PI * 2 * 8 * 0.5f / width));
     Vector3 minPos = new Vector3(-0.5f, -1 + 1f / height, 0);
     Vector3 maxPos = new Vector3(-0.5f, 1 + 1f / height, 0);
