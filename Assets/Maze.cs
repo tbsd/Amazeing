@@ -294,7 +294,6 @@ public class Maze : MonoBehaviour
     float pos = builder.transform.position.y;
     float posStep = 2.0f / height;
     float rotStep = 360.0f /  width;
-    bool isPlayerSet = false;
     for (int i = 0; i < height; ++i) {
       for (int j = 0; j < width; ++j) {
         if(graph[i, j].State == NodeState.Wall || graph[i, j].State == NodeState.Border) {
@@ -309,6 +308,8 @@ public class Maze : MonoBehaviour
           Finish.transform.localScale = wallScale - new Vector3(0, 0.1f, 0);
           Finish.transform.position = builder.transform.position;
           Finish.transform.rotation = builder.transform.rotation;
+        } else if (i > height / 2 && j > width / 2) {
+          // skip cell for player to start in cell and not in wall
         } else if (graph[i, j].State == NodeState.Start) {
             Player.transform.position = builder.transform.position;
             Player.transform.rotation = builder.transform.rotation;
