@@ -53,7 +53,7 @@ public class PlayerScript : MonoBehaviour
   }
 
   void sphereMove(Vector3 direction) {
-    float rSpeed = 0.07f;
+    float rSpeed = 0.2f;
     float up = -direction.z * rSpeed;
     float right = -direction.x * rSpeed;
     transform.RotateAround(Planet.transform.position, transform.forward, right);
