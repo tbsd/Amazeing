@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -2078,7 +2078,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.05, y: 2, z: 1.1}
+  m_Size: {x: 1.1, y: 2, z: 1.1}
   m_Center: {x: 0.016313374, y: 0, z: -0.06665045}
 --- !u!23 &938553213
 MeshRenderer:
