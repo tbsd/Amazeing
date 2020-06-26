@@ -299,7 +299,6 @@ public class Maze : MonoBehaviour
       for (int j = 0; j < width; ++j) {
         if(graph[i, j].State == NodeState.Wall || graph[i, j].State == NodeState.Border) {
           GameObject wallPart = GameObject.Instantiate(wallObject);
-          // wallPart.GetComponent<BoxCollider>().size += new Vector3(0, 3, 0);
           wallPart.transform.localScale = wallScale;
           if (i == 0 || i == height - 1) 
             wallPart.transform.localScale += new Vector3(wallScale.x / 10f, 0, 0);
@@ -311,10 +310,6 @@ public class Maze : MonoBehaviour
           Finish.transform.position = builder.transform.position;
           Finish.transform.rotation = builder.transform.rotation;
         } else if (!isPlayerSet && i > height / 2 && j > width / 2) {
-          // Player.transform.RotateAround(Planet.transform.position, Player.transform.up, j * rotStep);
-          // Player.transform.position = builder.transform.position;
-          // Player.transform.rotation = builder.transform.rotation;
-          // isPlayerSet = true;
         } else if (graph[i, j].State == NodeState.Start) {
             Player.transform.position = builder.transform.position;
             Player.transform.rotation = builder.transform.rotation;
