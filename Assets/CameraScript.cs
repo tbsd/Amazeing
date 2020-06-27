@@ -27,6 +27,8 @@ public class CameraScript : MonoBehaviour
     {
         float right = -camJoystick.Vertical * camSpeed;
         float up = camJoystick.Horizontal * camSpeed;
+        if (isOnPlayer && (Mathf.Abs(right) > 0.01 || Mathf.Abs(up) > 0.01))
+          savePosition();
         transform.RotateAround(planet.transform.position, transform.up, up);
         transform.RotateAround(planet.transform.position, transform.right, right);
         /*float d = 0.1f;
@@ -38,13 +40,16 @@ public class CameraScript : MonoBehaviour
     }
 
     void savePosition() {
-            onPlayer = transform.position;
-            onPlayerRot = transform.rotation;
-            Debug.Log(onPlayer);
+            onPlayer = transform.localPosition;
+            onPlayerRot = transform.localRotation;
             isOnPlayer = false;
     }
 
-    void restorePositon() {
+    public void restorePositon() {
+      transform.localPosition = onPlayer;
+      transform.localRotation = onPlayerRot;
+      isOnPlayer = true;
+      return;
       Vector3 planetNormal = new Vector3(0, 0, 0);
       RaycastHit hit = new RaycastHit();
       if (Physics.Raycast(player.transform.position, -transform.up, out hit, 10)) {
