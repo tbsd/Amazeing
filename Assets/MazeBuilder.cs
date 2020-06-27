@@ -401,8 +401,8 @@ namespace MazeBuilderNs {
           int t = rng.Next(0, ActualWidth);
           for (; k < ActualHeight * 2 - 1; ++k) {
             for (; t < ActualWidth * 2 - 1; ++t) {
-              int i = k % (ActualHeight - 1);
-              int j = t % (ActualWidth - 1);
+              int i = k % ActualHeight;
+              int j = t % ActualWidth;
               if (maze[i, j] != null && maze[i, j] is Node) {
                 if (!((Node)maze[i, j]).IsVisited && ((Node)maze[i, j]).HasVisitedNeighbour()) {
                   current = (Node)maze[i, j];
