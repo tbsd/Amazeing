@@ -110,7 +110,7 @@ public class PlayerScript : MonoBehaviour
     else
       gravDirection = (transform.position - Planet.transform.position).normalized;
     if (!OnGround) {
-        rb.AddForce(gravDirection * -gravity);
+        rb.AddForce(gravDirection * -gravity * 3);
     }
     float angle = Quaternion.Angle(Quaternion.identity, Quaternion.FromToRotation(transform.up, Groundnormal));
     if (true) {
