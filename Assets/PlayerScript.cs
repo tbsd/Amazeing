@@ -25,6 +25,9 @@ public class PlayerScript : MonoBehaviour
     rb = GetComponent<Rigidbody>();
     rb.freezeRotation = true;
     rotationSpeed = speed * 360 / (Mathf.PI * Planet.transform.lossyScale.x / transform.localScale.x);
+    if (shape == Shape.Sphere) {
+      prevDistance = Vector3.Distance(Planet.transform.position, transform.position);
+    }
   }
 
   // Update is called once per frame
@@ -52,6 +55,7 @@ public class PlayerScript : MonoBehaviour
     transform.RotateAround(Planet.transform.localPosition, Planet.transform.up, direction.z * rotationSpeed * Time.deltaTime);
   }
 
+  private float prevDistance;
   void sphereMove(Vector3 direction) {
     float rSpeed = 0.2f;
     float up = -direction.z * rSpeed;
@@ -59,6 +63,34 @@ public class PlayerScript : MonoBehaviour
     transform.RotateAround(Planet.transform.position, transform.forward, right);
     transform.RotateAround(Planet.transform.position, transform.right, up);
   }
+  /*
+  void sphereMove(Vector3 direction) {
+    float rSpeed = 0.2f;
+    float up = -direction.z * rSpeed;
+    float right = -direction.x * rSpeed;
+    Vector3 prevPosition = PlayerPlaceholder.transform.localPosition;
+    Quaternion prevRotation = PlayerPlaceholder.transform.localRotation;
+    // prevDistance = Vector3.Distance(Planet.transform.position, transform.position);
+    PlayerPlaceholder.transform.RotateAround(Planet.transform.position, transform.forward, right);
+    PlayerPlaceholder.transform.RotateAround(Planet.transform.position, transform.right, up);
+    float newDistance = Vector3.Distance(Planet.transform.position, PlayerPlaceholder.transform.position);
+    // transform.RotateAround(Planet.transform.position, transform.forward, right);
+    // transform.RotateAround(Planet.transform.position, transform.right, up);
+    // float newDistance = Vector3.Distance(Planet.transform.position, transform.position);
+    // Debug.Log(prevDistance - newDistance);
+    Debug.Log(Mathf.Abs(Mathf.Abs(prevDistance) - Mathf.Abs(newDistance)));
+    if (Mathf.Abs(Mathf.Abs(prevDistance) - Mathf.Abs(newDistance)) < 0.4f) {
+      // rb.velocity = rb.transform.TransformDirection(prev);
+      transform.RotateAround(Planet.transform.position, transform.forward, right);
+      transform.RotateAround(Planet.transform.position, transform.right, up);
+      // transform.localPosition = prevPosition;
+      // transform.localRotation = prevRotation;
+    } else {
+      PlayerPlaceholder.transform.localPosition = prevPosition;
+      PlayerPlaceholder.transform.localRotation = prevRotation;
+    }
+  }
+  */
 
   float gravity = 80;
   bool OnGround = false;
@@ -207,7 +239,7 @@ public class PlayerScript : MonoBehaviour
   }
 
   void OnCollisionEnter(Collision col) {
-    if (col.collider.tag == "wall")
-      rb.velocity = Vector3.zero;
+    // if (col.collider.tag == "wall")
+      // rb.velocity = Vector3.zero;
   }
 }
