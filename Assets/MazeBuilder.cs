@@ -511,7 +511,7 @@ namespace MazeBuilderNs {
         for (int j = 0; j < actualWidth; j++) {
           if (maze[i, j] == null)
             str += "░";
-          else if (maze[i, j].State == NodeState.Wall)
+          else if (maze[i, j].State == NodeState.Wall || maze[i,j].State == NodeState.Border)
             str += "▓";
           else
             str += "▒";
