@@ -187,90 +187,84 @@ public class Maze : MonoBehaviour
     builder.transform.rotation = Quaternion.identity;
     Vector3 wallScale = new Vector3(1f / actualEdge, 1f / actualEdge, 1f / actualEdge);
     float posStep = 1.0f / actualEdge;
-    for (int g = 0; g < 6; ++g) {
-      Vector3 minPos;
-      Vector3 vStep;
-      Vector3 hStep;
-      int hStart;
-      int vStart;
-      switch (g) {
-        case 0:
-          minPos = new Vector3(-0.5f + posStep / 2f, 0.5f + posStep / 2f, -0.5f + posStep / 2f);
-          vStep = new Vector3(posStep, 0, 0);
-          hStep = new Vector3(0, 0, posStep);
-          vStart = 0;
-          hStart = actualEdge;
-          break;
-        case 1:
-          minPos = new Vector3(0.5f + posStep / 2f, 0.5f - posStep / 2f, -0.5f + posStep / 2f);
-          builder.transform.Rotate(0, 0, -90);
-          vStep = new Vector3(0, -posStep, 0);
-          hStep = new Vector3(0, 0, posStep);
-          vStart = actualEdge;
-          hStart = actualEdge;
-          break;
-        case 2:
-          minPos = new Vector3(0.5f - posStep / 2f, 0.5f - posStep / 2f, 0.5f + posStep / 2f);
-          builder.transform.Rotate(0, -90, 0);
-          vStep = new Vector3(0, -posStep, 0);
-          hStep = new Vector3(-posStep, 0, 0);
-          vStart = actualEdge;
-          hStart = actualEdge * 2;
-          break;
-        case 3:
-          minPos = new Vector3(-0.5f - posStep / 2f, 0.5f - posStep / 2f, 0.5f - posStep / 2f);
-          builder.transform.Rotate(0, 0, -90);
-          vStep = new Vector3(0, -posStep, 0);
-          hStep = new Vector3(0, 0, -posStep);
-          vStart = actualEdge;
-          hStart = actualEdge * 3;
-          break;
-        case 4:
-          minPos = new Vector3(-0.5f + posStep / 2f, 0.5f - posStep / 2f, -0.5f - posStep / 2f);
-          builder.transform.Rotate(0, 0, -90);
-          vStep = new Vector3(0, -posStep, 0);
-          hStep = new Vector3(posStep, 0, 0);
-          vStart = actualEdge;
-          hStart = 0;
-          break;
-        case 5:
-          minPos = new Vector3(0.5f - posStep / 2f, -0.5f - posStep / 2f, -0.5f + posStep / 2f);
-          builder.transform.Rotate(-90, 0, -90);
-          vStep = new Vector3(-posStep, 0, 0);
-          hStep = new Vector3(0, 0, posStep);
-          vStart = actualEdge * 2;
-          hStart = actualEdge;
-          break;
-        default:
-          return;
-      }
-      for (int i = vStart; i < vStart + actualEdge; ++i) {
-        builder.transform.localPosition = minPos;
-        builder.transform.localPosition += vStep * (i - vStart);
-        for (int j = hStart; j < hStart + actualEdge; ++j) {
-          if (graph[i, j].State == NodeState.Wall) {
-            GameObject wallPart = GameObject.Instantiate(wallObject);
-            wallPart.transform.SetParent(Planet.transform);
-            wallPart.transform.localScale = wallScale;
-            wallPart.transform.position = builder.transform.position;
-            wallPart.transform.rotation = builder.transform.rotation;
-            wallPart.layer = LayerMask.NameToLayer ("Ignore Raycast");
-          } else if (graph[i, j].State == NodeState.Finish) {
-            Finish.transform.SetParent(Planet.transform);
-            Finish.transform.localScale = wallScale;
-            Finish.transform.position = builder.transform.position;
-            Finish.transform.rotation = builder.transform.rotation;
-            Finish.transform.SetParent(null);
-          } else if (graph[i, j].State == NodeState.Start) {
-            Player.transform.position = builder.transform.position;
-            Player.transform.rotation = builder.transform.rotation;
-          }
-          builder.transform.localPosition += hStep;
-        }
-      }
-    }
+    buildCubeFace(graph, actualEdge, 
+        new Vector3(-0.5f + posStep / 2f, 0.5f + posStep / 2f, -0.5f + posStep / 2f),
+        builder, 
+        new Vector3(posStep, 0, 0), 
+        new Vector3(0, 0, posStep), 
+        0, 
+        actualEdge);
+    builder.transform.Rotate(0, 0, -90);
+    buildCubeFace(graph, actualEdge, 
+        new Vector3(0.5f + posStep / 2f, 0.5f - posStep / 2f, -0.5f + posStep / 2f), 
+        builder, 
+        new Vector3(0, -posStep, 0), 
+        new Vector3(0, 0, posStep), 
+        actualEdge, 
+        actualEdge);
+    builder.transform.Rotate(0, -90, 0);
+    buildCubeFace(graph, actualEdge, 
+        new Vector3(0.5f - posStep / 2f, 0.5f - posStep / 2f, 0.5f + posStep / 2f), 
+        builder, 
+        new Vector3(0, -posStep, 0), 
+        new Vector3(-posStep, 0, 0), 
+        actualEdge, 
+        actualEdge * 2);
+    builder.transform.Rotate(0, 0, -90);
+    buildCubeFace(graph, actualEdge, 
+        new Vector3(-0.5f - posStep / 2f, 0.5f - posStep / 2f, 0.5f - posStep / 2f), 
+        builder, 
+        new Vector3(0, -posStep, 0), 
+        new Vector3(0, 0, -posStep), 
+        actualEdge, 
+        actualEdge * 3);
+    builder.transform.Rotate(0, 0, -90);
+    buildCubeFace(graph, actualEdge, 
+        new Vector3(-0.5f + posStep / 2f, 0.5f - posStep / 2f, -0.5f - posStep / 2f), 
+        builder, 
+        new Vector3(0, -posStep, 0), 
+        new Vector3(posStep, 0, 0), 
+        actualEdge, 
+        0);
+    builder.transform.Rotate(-90, 0, -90);
+    buildCubeFace(graph, actualEdge, 
+        new Vector3(0.5f - posStep / 2f, -0.5f - posStep / 2f, -0.5f + posStep / 2f), 
+        builder, 
+        new Vector3(-posStep, 0, 0), 
+        new Vector3(0, 0, posStep), 
+        actualEdge * 2, 
+        actualEdge);
     GameObject.Destroy(builder);
     GameObject.Destroy(wallObject);
+  }
+
+  
+  private void buildCubeFace(MazeElement[,] graph, int actualEdge, Vector3 minPos, GameObject builder, Vector3 vStep, Vector3 hStep, int vStart, int hStart) {
+     Vector3 wallScale = new Vector3(1f / actualEdge, 1f / actualEdge, 1f / actualEdge);
+     for (int i = vStart; i < vStart + actualEdge; ++i) {
+          builder.transform.localPosition = minPos;
+          builder.transform.localPosition += vStep * (i - vStart);
+          for (int j = hStart; j < hStart + actualEdge; ++j) {
+            if (graph[i, j].State == NodeState.Wall) {
+              GameObject wallPart = GameObject.Instantiate(wallObject);
+              wallPart.transform.SetParent(Planet.transform);
+              wallPart.transform.localScale = wallScale;
+              wallPart.transform.position = builder.transform.position;
+              wallPart.transform.rotation = builder.transform.rotation;
+              wallPart.layer = LayerMask.NameToLayer ("Ignore Raycast");
+            } else if (graph[i, j].State == NodeState.Finish) {
+              Finish.transform.SetParent(Planet.transform);
+              Finish.transform.localScale = wallScale;
+              Finish.transform.position = builder.transform.position;
+              Finish.transform.rotation = builder.transform.rotation;
+              Finish.transform.SetParent(null);
+            } else if (graph[i, j].State == NodeState.Start) {
+              Player.transform.position = builder.transform.position;
+              Player.transform.rotation = builder.transform.rotation;
+            }
+            builder.transform.localPosition += hStep;
+          }
+        }
   }
   
   void cylinderMaze(int mazeWidth, int mazeHeight) {
